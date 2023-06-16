@@ -2,6 +2,7 @@ package cmo.project.logicaldoor;
 
 import cmo.project.Composant;
 import cmo.project.NonConnecteException;
+import cmo.project.signal.SignalLogic;
 
 public class And extends Porte2Entrees {
     private Composant in1;
@@ -28,15 +29,21 @@ public class And extends Porte2Entrees {
         return "(And@"+this.getId() +" in1 : "+ s1 +" in2 : "+ s2 +")";
     }
 
-    public boolean getEtat() throws NonConnecteException {
+    @Override
+    public boolean isInput() {return false;}
+    @Override
+    public boolean isOutput() {return false;}
+
+    public SignalLogic getEtat() throws NonConnecteException {
         if (in1 == null || in2 == null) {
             throw new NonConnecteException();
         }
-        return in1.getEtat() && in2.getEtat();
+        return in1.getEtat().and(in2.getEtat());
+        //return in1.getEtat() && in2.getEtat();
     }
 
     @Override
-    public void compareTo(Composant composant) {
-        // TODO Faire méthode pour sort après avec circuit voir utilisation interface
+    public SignalLogic evaluate() {
+        return in1.evaluate().and(in2.evaluate());
     }
 }

@@ -2,6 +2,7 @@ package cmo.project.io;
 
 import cmo.project.Composant;
 import cmo.project.NonConnecteException;
+import cmo.project.signal.SignalLogic;
 
 public class Vanne extends Composant {
     private Composant in;
@@ -16,15 +17,19 @@ public class Vanne extends Composant {
         return "(Van@"+this.getId() +" in : "+ s+")";
     }
 
-    public boolean getEtat() throws NonConnecteException {
+    @Override
+    public boolean isInput() {return false;}
+    @Override
+    public boolean isOutput() {return true;}
+
+    public SignalLogic getEtat() throws NonConnecteException {
         if (in == null) {
             throw new NonConnecteException();
         }
-        return in.getEtat();
-    }
+        return in.getEtat();    }
 
     @Override
-    public void compareTo(Composant composant) {
-        // TODO Faire méthode pour sort après avec circuit voir utilisation interface
+    public SignalLogic evaluate() {
+        return in.evaluate();
     }
 }

@@ -1,24 +1,25 @@
 package cmo.project;
 
 import cmo.project.io.Interrupteur;
+import cmo.project.io.Vanne;
+import cmo.project.signal.SignalHaut;
+import cmo.project.signal.SignalLogic;
+import sun.misc.Signal;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
-public class Circuit  {
+public class Circuit implements Evaluable {
     private String nom;
-    private List<Composant> cps;
+    private List<Composant> cps = new ArrayList<>();
 
     public Circuit(String nom, Composant[] cps) {
         this.nom = nom;
         this.cps.addAll(Arrays.asList(cps));
-        // TODO A TRIER EN RAJOUTANT INTERFACE COMPARABLE A COMPOSANT
+        Collections.sort(this.cps);
     }
 
     public List<String> nomenclature() {
-        List<String > tmp = null;
+        List<String > tmp = new ArrayList<>();
         for (Composant c : cps) {
             try {
                 tmp.add(c.getId());
@@ -49,21 +50,33 @@ public class Circuit  {
     }
 
     public List<Interrupteur> getInputs() {
-        List<Interrupteur> tmp = null;
+        List<Interrupteur> tmp = new ArrayList<>();
         for(Composant c : cps) {
-            // TODO | trouvez un moyen, en parcourant la liste des composants du circuit, de stocker uniquement
-            // TODO | les interrupteurs dans cette liste :
-            // TODO |   — sans utiliser de test if sur le type pour chaque composant,
-            // TODO |   — sans utiliser la méthode instanceof.
+            if (c.isInput()) {
+                tmp.add((Interrupteur) c);
+            }
         }
         return tmp;
     }
 
-    /*public List<Vanne> getOutputs() {
+    public List<Vanne> getOutputs() {
+        List<Vanne> tmp = new ArrayList<>();
+        for (Composant c : cps) {
+            if (c.isOutput()) {
+                tmp.add((Vanne) c);
+            }
+        }
+        return tmp;
+    }
 
-    }*/
 
-
-
-
+    @Override
+    public SignalLogic evaluate() {
+        SignalLogic sh = new SignalHaut();
+        for(Vanne v: this.getOutputs())
+        {
+           sh = sh.and(v.evaluate());
+        }
+        return sh;
+    }
 }
