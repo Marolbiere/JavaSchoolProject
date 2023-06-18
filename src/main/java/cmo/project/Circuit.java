@@ -1,10 +1,10 @@
 package cmo.project;
 
+import cmo.project.exception.NonConnecteException;
 import cmo.project.io.Interrupteur;
 import cmo.project.io.Vanne;
 import cmo.project.signal.SignalHaut;
 import cmo.project.signal.SignalLogic;
-import sun.misc.Signal;
 
 import java.util.*;
 
@@ -17,6 +17,8 @@ public class Circuit implements Evaluable {
         this.cps.addAll(Arrays.asList(cps));
         Collections.sort(this.cps);
     }
+
+    public String getNom() {return this.nom;}
 
     public List<String> nomenclature() {
         List<String > tmp = new ArrayList<>();

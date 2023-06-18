@@ -15,7 +15,6 @@ public class SignalBas extends SignalLogic{
     }
 
     public String toString() {
-        // System.out.println(value());
         return Boolean.toString(value());
     }
 }

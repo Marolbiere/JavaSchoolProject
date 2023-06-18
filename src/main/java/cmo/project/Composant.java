@@ -1,5 +1,6 @@
 package cmo.project;
 
+import cmo.project.exception.NonConnecteException;
 import cmo.project.signal.SignalLogic;
 
 public abstract class Composant implements Comparable<Composant>, Evaluable{
@@ -9,8 +10,8 @@ public abstract class Composant implements Comparable<Composant>, Evaluable{
     }
 
     public abstract String description();
-    public abstract boolean isInput(); //Entrée pur
-    public abstract boolean isOutput(); //Sortie pur
+    public abstract boolean isInput(); // Test si le composant est une entrée pure
+    public abstract boolean isOutput(); // Test si le composant est une sortie pure
 
     @Override
     public int compareTo(Composant c) {

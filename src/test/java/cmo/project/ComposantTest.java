@@ -1,10 +1,9 @@
 package cmo.project;
 
+import cmo.project.exception.NonConnecteException;
 import cmo.project.logicaldoor.*;
 import cmo.project.io.*;
-import cmo.project.signal.SignalHaut;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ComposantTest {
@@ -45,7 +44,54 @@ public class ComposantTest {
     }
 
     @Test
-    public void testGetEtatSansException() throws NonConnecteException{
+    public void testIsInput() {
+        // isInput de Interrupteur
+        Interrupteur i = new Interrupteur();
+        assertEquals(true, i.isInput());
+
+        // isInput de la vanne
+        Vanne v = new Vanne();
+        assertEquals(false, v.isInput());
+
+        // isInput de la porte Not
+        Not n = new Not();
+        assertEquals(false, n.isInput());
+
+        // isInput de la porte And
+        And a = new And();
+        assertEquals(false, a.isInput());
+
+        // isInput de la porte Or
+        Or o = new Or();
+        assertEquals(false, o.isInput());
+    }
+
+    @Test
+    public void testIsOutput() {
+        //IsOutput de Interrupteur
+        Interrupteur i = new Interrupteur();
+        assertEquals(false, i.isOutput());
+
+        // isOutput de Vanne
+        Vanne v = new Vanne();
+        assertEquals(true, v.isOutput());
+
+        // isOutput de de la porte Not
+        Not n = new Not();
+        assertEquals(false, n.isOutput());
+
+        // isOutput de la porte And
+        And a = new And();
+        assertEquals(false, a.isOutput());
+
+        // isOutput de la porte Or
+        Or o = new Or();
+        assertEquals(false, o.isOutput());
+    }
+
+
+    @Test
+    public void testGetEtatSansException() throws NonConnecteException {
         //getEtat de l'interrupteur
         Interrupteur i = new Interrupteur();
         i.on();
@@ -151,8 +197,58 @@ public class ComposantTest {
         });
         assertEquals("Entree non connecte au composant", e.getMessage());
     }
+    @Test
+    public void testComposantEvaluate() {
+        // Evaluate Interrupteur
+        Interrupteur i = new Interrupteur();
+        i.on();
+        assertEquals(true, i.evaluate().value());
+        i.off();
+        assertEquals(false, i.evaluate().value());
 
+        // Evaluate Not
+        Not n = new Not();
+        n.setIn(i);
 
+        assertEquals(true,n.evaluate().value());
+        i.on();
+        assertEquals(false, n.evaluate().value());
 
+        // Evaluate Vanne
 
+        Vanne v = new Vanne();
+        v.setIn(i);
+
+        assertEquals(true, v.evaluate().value());
+        i.off();
+        assertEquals(false,v.evaluate().value());
+
+        // Evaluate And
+        Interrupteur i1 = new Interrupteur();
+        And a = new And();
+        a.setIn1(i);
+        a.setIn2(i1);
+        i.on();
+        i1.on();
+
+        assertEquals(true, a.evaluate().value());
+        i.off();
+        assertEquals(false, a.evaluate().value());
+        i1.off();
+        assertEquals(false, a.evaluate().value());
+
+        // Evaluate Or
+        Or o = new Or();
+        o.setIn1(i);
+        o.setIn2(i1);
+        i.on();
+        i1.on();
+
+        assertEquals(true, o.evaluate().value());
+        i.off();
+        assertEquals(true, o.evaluate().value());
+        i1.off();
+        assertEquals(false, o.evaluate().value());
+
+    }
 }

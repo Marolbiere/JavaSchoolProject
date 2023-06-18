@@ -2,13 +2,11 @@ package cmo.project.io;
 
 import cmo.project.CommandLineInterface;
 import cmo.project.Composant;
-import cmo.project.NonChoiceException;
-import cmo.project.NonConnecteException;
+import cmo.project.exception.NonChoiceException;
+import cmo.project.exception.NonConnecteException;
 import cmo.project.signal.SignalBas;
 import cmo.project.signal.SignalHaut;
 import cmo.project.signal.SignalLogic;
-
-import java.lang.reflect.Parameter;
 
 public class Interrupteur extends Composant {
     private String nom;

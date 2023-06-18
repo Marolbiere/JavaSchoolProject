@@ -1,7 +1,7 @@
 package cmo.project.io;
 
 import cmo.project.Composant;
-import cmo.project.NonConnecteException;
+import cmo.project.exception.NonConnecteException;
 import cmo.project.signal.SignalLogic;
 
 public class Vanne extends Composant {

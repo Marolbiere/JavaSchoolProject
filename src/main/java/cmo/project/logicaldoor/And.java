@@ -1,7 +1,7 @@
 package cmo.project.logicaldoor;
 
 import cmo.project.Composant;
-import cmo.project.NonConnecteException;
+import cmo.project.exception.NonConnecteException;
 import cmo.project.signal.SignalLogic;
 
 public class And extends Porte2Entrees {
@@ -39,7 +39,7 @@ public class And extends Porte2Entrees {
             throw new NonConnecteException();
         }
         return in1.getEtat().and(in2.getEtat());
-        //return in1.getEtat() && in2.getEtat();
+        //return in1.getEtat() && in2.getEtat(); // <-- avant passage en SignalLogic
     }
 
     @Override
